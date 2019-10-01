@@ -33,7 +33,7 @@ refernces:
 
 # Common environmental variables
   env_vars: &env_vars
-    IMAGE_NAME: eeg-docker    # Name of the project on docker
+    IMAGE_NAME: eeg-mt-dna-combine  # Name of the project on docker
     IMAGE_TAG: latest     #  Docker version tag
 
 # Code for building and push the docker to docker.com
@@ -41,7 +41,6 @@ refernces:
     run:
       name: Build the docker from Dockerfile and push it to docker.com
       command: |
-          docker login --help
           docker build ./ --no-cache=true  \
             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
@@ -63,12 +62,10 @@ refernces:
     deploy:
       name: Call the test_image job via curl request
       command: |
-                sudo curl --user $DOCKER_TOKEN_GLS: \
-                --header 'Accept: application/json'                        \
-                --header 'Content-Type: application/json'                  \
-                -d "{\"branch\": \"$CIRCLE_BRANCH\", \"revision\": \"$CIRCLE_SHA1\", \"parameters\": {  \"run_on_commit\": false, \"run_to_test_img\": true }}" \
-                --data build_parameters[CIRCLE_JOB]=build_deploy_docker \
-                -X POST https://circleci.com/api/v2/project/gh/EvolEcolGroup/EEG_Docker/pipeline -L
+            sudo curl --user $DOCKER_TOKEN: \
+                --data build_parameters[CIRCLE_JOB]=test_image \
+                --data revision=$CIRCLE_SHA1 \
+                https://circleci.com/api/v1.1/project/github/EvolEcolGroup/EEG_Docker/tree/$CIRCLE_BRANCH
 
 # Code for building and push the docker to docker.com
   check_pagkages: &check_pagkages
@@ -107,8 +104,8 @@ jobs:
     environment:
       <<: *env_vars # Import here the env_variables. They are used in the name of the docker image
     steps:
-      - *check_pagkages # Prevent the variables to be read from later text. Variables definition moved in the deploy block
-      
+      - *check_pagkages
+
  # Check if an update of docker is needed, if so run the build_deploy_docker job      
   check_update_docker: 
     docker:
@@ -119,7 +116,6 @@ jobs:
       - checkout
       #- run: cat /etc/*-release # Echo Linux version
       #- *check_pagkages # Prevent the variables to be read from later text. Variables definition moved in the deploy block
-  
       - deploy: 
           name: Check if docker need to be updated (based on packages upgrade list)
           command: |
@@ -239,13 +235,12 @@ workflows:
       # https://circleci.com/docs/2.0/triggers/
       # https://circleci.com/docs/2.0/workflows/#scheduling-a-workflow
       - schedule:
-          cron: "0 0 1 * *" # Cron-job every 1-st day of the month at 12am UTC
+          cron: "0 0 2 * *" # Cron-job every 1-st day of the month at 12am UTC
           # cron: "0 0 * * *" # Cron-job every midnight
           # cron: "0 * * * *" # Cron-job every hour
           filters:
             branches:
-              # only: dev, master
-              only: master
+              only: mtDNAcombine
 
     jobs:
       #-  test_curl_trigger
