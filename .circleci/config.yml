@@ -1,0 +1,224 @@
+---
+version: 2
+
+# ********** ********** ********** ********** ********** ********** ********** ********** #
+# Requirements:
+#
+# Make sure to set envirnomental variables in circle ci (or as resources in your organization's org-global Context):  
+# - DOCKER_USERNAME : the username  used on docker.com
+# - DOCKER_PASSWORD : the password  used on docker.com
+# - DOCKER_TOKEN    : a Circleci personal o Project API token (https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token)
+#
+# ********** ********** ********** ********** ********** ********** ********** ********** #
+
+# ********** ********** ********** ********** ********** ********** ********** ********** #
+# Code references 
+refernces:
+
+# Common environmental variables
+  env_vars: &env_vars
+    IMAGE_NAME: ubuntu-lts-r    # Name of the project on docker
+    IMAGE_TAG: latest     #  Docker version tag
+
+# Code for building and push the docker to docker.com
+  build_docker: &build_docker
+    run:
+      name: Build the docker from Dockerfile and push it to docker.com
+      command: |
+          docker login --help
+          docker build ./ --no-cache=true  \
+            --build-arg VCS_REF=$(git rev-parse --short HEAD) \
+            --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG 
+
+          # docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_PASSWORD
+      #--build-arg BUILD_VERSION=${build_version} \  
+      #
+      # Preparing the Image for the Registry (docker build)
+      # > https://circleci.com/docs/2.0/custom-images/#preparing-the-image-for-the-registry
+      #
+      # Pushing the image to the registry (docker login && docker push)
+      # > https://circleci.com/docs/2.0/custom-images/#pushing-the-image-to-the-registry
+
+# Code for calling the test of the image via the curl request
+  call_test_image_job: &call_test_image_job
+    deploy:
+      name: Call the test_image job via curl request
+      command: |
+            sudo curl --user $DOCKER_TOKEN: \
+                --data build_parameters[CIRCLE_JOB]=test_image \
+                --data revision=$CIRCLE_SHA1 \
+                https://circleci.com/api/v1.1/project/github/EvolEcolGroup/EEG_Docker/tree/$CIRCLE_BRANCH
+
+# Code for building and push the docker to docker.com
+  check_pagkages: &check_pagkages
+    run:
+      name: Check if packages were updated
+      command: |
+
+        # Check if there are apt packages to be upgraded
+        apt2upg=$( sudo apt-get -s dist-upgrade | grep -Po "^[[:digit:]]+ (?=upgraded)" ) 
+
+        # Check if there are old r packages to be upgraded. If not convert NULL to 0
+        r2upg=$( sudo Rscript -e ' r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)'  )
+
+        # Print information
+        printf "Pakages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
+
+# ********** ********** ********** ********** ********** ********** ********** ********** #
+# JOBS
+jobs:
+
+# Main job to build and push the image to docker.com
+  build_deploy_docker:
+    machine: 
+      image: circleci/classic:latest
+    environment:
+      <<: *env_vars # Import here the env_variables. They are used in the building process
+    steps:
+      - checkout
+      - *build_docker
+      - *call_test_image_job
+
+# Pull the image and test if it works.      
+  test_image:
+    docker:
+      - image: $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG # Require env_vars
+    environment:
+      <<: *env_vars # Import here the env_variables. They are used in the name of the docker image
+    steps:
+      - *check_pagkages # Prevent the variables to be read from later text. Variables definition moved in the deploy block
+      
+ # Check if an update of docker is needed, if so run the build_deploy_docker job      
+  check_update_docker: 
+    docker:
+      - image: $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+    environment:
+      <<: *env_vars # Import here the env_variables. They are used in the name of the docker image and in the building process
+    steps:
+      - checkout
+      #- run: cat /etc/*-release # Echo Linux version
+      #- *check_pagkages # Prevent the variables to be read from later text. Variables definition moved in the deploy block
+
+      - deploy: 
+          name: Check if docker need to be updated (based on packages upgrade list)
+          command: |
+
+              # Check if there are apt packages to be upgraded
+              apt2upg=$( sudo apt-get -s dist-upgrade | grep -Po "^[[:digit:]]+ (?=upgraded)" ) 
+
+              # Check if there are old r packages to be upgraded. If not convert NULL to 0
+              r2upg=$( sudo Rscript -e ' r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)'  )
+
+              # Print information
+              printf "Pakages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
+
+              # Check if either (apt or r) packages need to be upgraded are >0 then echo info + rebuild the docker
+              if [  "$apt2upg" -gt 0 ] || [  "$r2upg" -gt 0 ] ; then
+                printf "Some packages require to be updated. Proceed to rebuild the docker. \n"
+
+                ## ########################################################### 
+                ## The following if are only for test. They should be run while building the docker. 
+                  # # Update apt packages if needed
+                  # if [  "$apt2upg" ]; then     
+                  #       sudo apt-get -s dist-upgrade
+                  # fi
+                  # # Update r packages if needed
+                  # if [  "$r2upg" ]; then                     
+                  #         printf "Updating $r2upg R packages... \n"
+                  #   sudo Rscript -e 'update.packages(ask = FALSE)'
+                  # fi
+                  #  
+                  # apt2upg=$( sudo apt-get -s dist-upgrade | grep -Po "^[[:digit:]]+ (?=upgraded)" ) 
+                  # r2upg=$( sudo Rscript -e ' r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)'  )
+                  # printf "Pakages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
+                  ## ###########################################################
+
+                # Manually trigger the job for building the docker. Api v1.1 requires to have yml and workflow version:2 (not 2.1). 
+                # The Api v.2  is in development. Currently it is not working with curl triggers (re-check periodically in future for updates)
+
+                sudo curl --user $DOCKER_TOKEN: \
+                       --data build_parameters[CIRCLE_JOB]=build_deploy_docker \
+                       --data revision=$CIRCLE_SHA1 \
+                       https://circleci.com/api/v1.1/project/github/EvolEcolGroup/EEG_Docker/tree/$CIRCLE_BRANCH
+              # curl --data build=true -X POST https://registry.hub.docker.com/u/svendowideit/testhook/trigger/be579c82-7c0e-11e4-81c4-0242ac110020/
+              
+              else
+                printf "All packages already up to date. No further action required. \n" 
+              fi
+      - run:  echo "End of script."
+      # - *check_pagkages
+      
+# Test the curl_trigger: execute the curl trigger without performing the checks on the packages
+  test_curl_trigger:  
+    machine: 
+        image: circleci/classic:latest
+    environment:
+      <<: *env_vars # Import here the configuration parameters
+    steps:
+      - *call_test_image_job   
+
+# ********** ********** ********** ********** ********** ********** ********** ********** #
+# Workflow
+
+workflows:
+  version: 2
+
+  manual_test_image:
+    jobs:
+      -  wait_manual_approval:
+          type: approval # requires that an in-app button be clicked by an appropriate member of the pr
+
+      - test_curl_trigger:     
+      # - test_image:  # Only run test on sucessfully builds
+          requires:
+          - wait_manual_approval
+
+  manual_build_deploy_docker:
+    jobs:
+  
+      -  wait_manual_approval:
+          type: approval # requires that an in-app button be clicked by an appropriate member of the pr
+  
+      - build_deploy_docker: # Wait for the manual approval to build the image
+          requires:
+          - wait_manual_approval
+  
+      # - test_image:  # Only run test on sucessfully builds
+      #     requires:
+      #       - build_deploy_docker
+
+  update_docker:
+    jobs:
+     # - test_curl_trigger
+      - check_update_docker # If updates are needed, call build_deploy_docker
+
+      # - test_image:  # Only run test on sucessfully builds
+  #         requires:
+  #           - build_deploy_docker
+    
+  cron_workflow:  
+  
+    triggers: #use the triggers key to indicate a scheduled build - filters MUST be defined to make it work
+      # https://circleci.com/docs/2.0/triggers/
+      # https://circleci.com/docs/2.0/workflows/#scheduling-a-workflow
+      - schedule:
+          cron: "0 0 1 * *" # Cron-job every 1-st day of the month at 12am UTC
+          # cron: "0 0 * * *" # Cron-job every midnight
+          # cron: "0 * * * *" # Cron-job every hour
+          filters:
+            branches:
+              # only: dev, master
+              only: master
+
+    jobs:
+      #-  test_curl_trigger
+      - check_update_docker # If updates are needed, call build_deploy_docker
+
+      # - test_image:  # Only run test on sucessfully builds
+      #     requires:
+      #       - check_update_docker
+      
+...

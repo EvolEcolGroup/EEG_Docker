@@ -1,0 +1,11 @@
+# As from : https://medium.com/@gdiener/how-to-build-a-smaller-docker-image-76779e18d48a
+.env
+.editorconfig
+.git
+.gitignore
+.github
+.cache
+*.md
+LICENSE
+Makefile
+vendor/
