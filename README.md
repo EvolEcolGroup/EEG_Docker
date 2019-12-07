@@ -1,7 +1,7 @@
 # EEG Docker
 
 This project creates a Ubuntu docker image and pushes it to docker.com.
-The image is based on rocker/r-ubuntu:18.04  (see https://hub.docker.com/r/rocker/r-ubuntu) and has Ubuntu 18.04 LTS. In addition, several apt and r packages are pre-installed so to run continuous integration on EEG projects it via CircleCI. The docker is pubicly available at: https://hub.docker.com/r/manicaeeg/eeg-mt-dna-combine
+The image is based on manicaeeg/eeg-docker (see https://hub.docker.com/r/manicaeeg/eeg-docker) and has Ubuntu 18.04 LTS. In addition, several apt and r packages are pre-installed so to run continuous integration on the EEG [mtDNAcombine](https://github.com/EvolEcolGroup/mtDNAcombine) project via CircleCI. The docker is pubicly available at: https://hub.docker.com/r/manicaeeg/eeg-mt-dna-combine
 
 [![CircleCI](https://img.shields.io/circleci/build/github/EvolEcolGroup/EEG_Docker/mtDNAcombine?label=build%20%28mtDNAcombine%29&logo=circleci&style=plastic&token=0cab61dc3dfa7b884dfe042a40f22d020ba9dc45)](https://circleci.com/gh/EvolEcolGroup/EEG_Docker/tree/mtDNAcombine)
 

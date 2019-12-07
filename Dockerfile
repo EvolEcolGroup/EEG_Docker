@@ -1,5 +1,5 @@
 # Pull base image from EEG docker
-FROM manicaeeg/ubuntu-lts-r:latest
+FROM manicaeeg/eeg-docker:latest
 
 ARG BUILD_DATE
 ARG VCS_REF
