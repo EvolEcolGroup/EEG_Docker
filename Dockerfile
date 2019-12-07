@@ -2,8 +2,8 @@
 # To install, use the explicit LTS tag---currently 18.04---when pulling
 # https://hub.docker.com/r/rocker/r-ubuntu
 #FROM rocker/r-ubuntu:18.04 
-FROM manicaeeg/ubuntu-lts-r:latest
-# This docker is available at https://hub.docker.com/repository/docker/manicaeeg/ubuntu-lts-r
+FROM manicaeeg/eeg-docker:latest
+# This docker is available at https://hub.docker.com/repository/docker/manicaeeg/eeg-docker
 
 
 ARG BUILD_DATE

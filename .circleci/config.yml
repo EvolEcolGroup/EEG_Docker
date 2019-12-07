@@ -17,7 +17,7 @@ refernces:
 
 # Common environmental variables
   env_vars: &env_vars
-    IMAGE_NAME: ubuntu-lts-r    # Name of the project on docker
+    IMAGE_NAME: eeg-docker    # Name of the project on docker
     IMAGE_TAG: latest     #  Docker version tag
 
 # Code for building and push the docker to docker.com
