@@ -39,6 +39,7 @@ RUN \
     ca-certificates \
     cmake \
     curl \
+    doxygen \
     git \ 
     gzip \
     libboost-all-dev \
@@ -48,10 +49,14 @@ RUN \
     libssl-dev \
     libxml2-dev \
     netcdf-bin \
+    pandoc \
+    pandoc-citeproc \
+    qpdf \
     ssh \
     subversion \
     sudo \
     tar  \
+    valgrind \
   && \  
   sudo apt-get autoremove -y && \
   sudo apt-get clean  \
