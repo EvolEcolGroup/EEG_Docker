@@ -41,6 +41,7 @@ RUN \
     curl \
     doxygen \
     git \ 
+    graphviz \
     gzip \
     libboost-all-dev \
     libgsl-dev \
