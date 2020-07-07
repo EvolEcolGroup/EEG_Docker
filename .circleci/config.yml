@@ -8,7 +8,7 @@ version: 2.1
 # - DOCKER_USERNAME : the username  used on docker.com
 # - DOCKER_PASSWORD : the password  used on docker.com
 # - DOCKER_TOKEN    : a Circleci personal o Project API token (https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token)
-# - DOCKER_TOKEN_GLS: a Circleci personal API token - A personal one is needed to trigger workflows with API v2. (The value is added in the project environment variables)
+# - DOCKER_TOKEN_PERSONAL_AM: a Circleci personal API token - A personal one is needed to trigger workflows with API v2. (The value is added in the project environment variables)
 # ********** ********** ********** ********** ********** ********** ********** ********** #
 
 # ********** ********** ********** ********** ********** ********** ********** ********** #
@@ -63,7 +63,7 @@ refernces:
     deploy:
       name: Call the test_image job via curl request
       command: |
-                sudo curl --user $DOCKER_TOKEN_GLS: \
+                sudo curl --user $DOCKER_TOKEN_PERSONAL_AM: \
                 --header 'Accept: application/json'                        \
                 --header 'Content-Type: application/json'                  \
                 -d "{\"branch\": \"$CIRCLE_BRANCH\", \"revision\": \"$CIRCLE_SHA1\", \"parameters\": {  \"run_on_commit\": false, \"run_to_test_img\": true }}" \
@@ -158,7 +158,7 @@ jobs:
                 # Api v1.1 required to have yml and workflow version:2 (not 2.1). 
                 # Api v.2  currently stable and used here.
                 #printf $CIRCLE_BRANCH
-                sudo curl --user $DOCKER_TOKEN_GLS:         \
+                sudo curl --user $DOCKER_TOKEN_PERSONAL_AM:         \
                   --header 'Accept: application/json'       \
                   --header 'Content-Type: application/json' \
                   -d "{\"branch\": \"$CIRCLE_BRANCH\", \"revision\": \"$CIRCLE_SHA1\", \"parameters\": {  \"run_on_commit\": false, \"run_after_check_update\": true }}" \
