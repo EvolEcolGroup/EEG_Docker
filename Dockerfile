@@ -14,9 +14,9 @@ ARG VCS_REF
 # Labels
 LABEL maintainer="Gian Luigi Somma"
 LABEL org.label-schema.schema-version = "1.0"
-LABEL org.label-schema.name = "R-Ubuntu-Docker"
-LABEL org.label-schema.description = "A Ubuntu LTS Docker with R"
-LABEL org.label-schema.vcs="https://github.com/orion434/R-Ubuntu-Docker"
+LABEL org.label-schema.name = "EEG-Docker"
+LABEL org.label-schema.description = "A Ubuntu LTS Docker with R for EEG projects"
+LABEL org.label-schema.vcs="https://github.com/EvolEcolGroup/EEG_Docker/"
 
 LABEL org.label-schema.build-date=$BUILD_DATE
 LABEL org.label-schema.vcs-ref=$VCS_REF 
