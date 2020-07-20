@@ -2,7 +2,8 @@
 # To install, use the explicit LTS tag---currently 18.04---when pulling
 # https://hub.docker.com/r/rocker/r-ubuntu
 #FROM rocker/r-ubuntu:18.04 
-FROM manicaeeg/eeg-docker:latest
+FROM rstudio/r-base:4.0.2-bionic 
+#FROM manicaeeg/eeg-docker:latest # rstudio/r-base:x.y.z-distro, see https://github.com/rstudio/r-docker
 # This docker is available at https://hub.docker.com/repository/docker/manicaeeg/eeg-docker
 
 

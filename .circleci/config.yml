@@ -5,10 +5,11 @@ version: 2.1
 # Requirements:
 #
 # Make sure to set envirnomental variables in circle ci (or as resources in your organization's org-global Context):  
-# - DOCKER_USERNAME : the username  used on docker.com
-# - DOCKER_PASSWORD : the password  used on docker.com
-# - DOCKER_TOKEN    : a Circleci personal o Project API token (https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token)
-# - DOCKER_TOKEN_PERSONAL_AM: a Circleci personal API token - A personal one is needed to trigger workflows with API v2. (The value is added in the project environment variables)
+# - DOCKER_USERNAME: the username  used on docker.com
+# - DOCKER_PASSWORD: the password  used on docker.com
+# - DOCKER_TOKEN_PERSONAL_AM: a Circleci personal API token - A personal one is needed to trigger workflows with API v2. 
+#                     (The value is added in the project environment variables)
+#                     (https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token)
 # ********** ********** ********** ********** ********** ********** ********** ********** #
 
 # ********** ********** ********** ********** ********** ********** ********** ********** #
@@ -34,7 +35,7 @@ refernces:
 # Common environmental variables
   env_vars: &env_vars
     IMAGE_NAME: eeg-docker    # Name of the project on docker
-    IMAGE_TAG: latest     #  Docker version tag
+    IMAGE_TAG: r-v4     #  Docker version tag
 
 # Code for building and push the docker to docker.com
   build_docker: &build_docker
