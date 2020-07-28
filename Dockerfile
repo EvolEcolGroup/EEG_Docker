@@ -27,6 +27,14 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 # curl is needed for remote trigger the checks
 
 RUN \
+  sudo Rscript -e 'getOption("repos")'; \
+  sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r)' \
+  sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
+RUN \
+  sudo Rscript -e 'update.packages(ask = FALSE)'
+
+
+RUN \
   apt-get update -qq && \
   apt-get install -y -qq --no-install-recommends \
   apt-utils \
@@ -67,10 +75,10 @@ RUN \
 
 # Set the default repository for CRAN and install devtools
 # sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r)' \
-RUN \
-    sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
-RUN \
-    sudo Rscript -e 'update.packages(ask = FALSE)'
+#RUN \
+#    sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
+#RUN \
+#    sudo Rscript -e 'update.packages(ask = FALSE)'
 
 # Check if there are apt or r packages to be upgraded
 #RUN \
