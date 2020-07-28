@@ -68,7 +68,8 @@ RUN \
 # Set the default repository for CRAN and install devtools
 # sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r)' \
 RUN \
-    sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' && \
+    sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
+RUN \
     sudo Rscript -e 'update.packages(ask = FALSE)'
 
 # Check if there are apt or r packages to be upgraded
