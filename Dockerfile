@@ -28,10 +28,10 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 
 RUN \
   sudo Rscript -e 'getOption("repos")'; \
-  sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r)' \
+  sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r); getOption("repos")' \
   sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
 RUN \
-  sudo Rscript -e 'update.packages(ask = FALSE)'
+  sudo Rscript -e 'getOption("repos"); update.packages(ask = FALSE)'
 
 
 RUN \
