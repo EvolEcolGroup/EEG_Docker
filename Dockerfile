@@ -67,11 +67,12 @@ RUN \
 
 # Set the default repository for CRAN and install devtools
 # The default is @CRAN@. It can be changed with:
-# sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r)' \
+# sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "https://cloud.r-project.org/" ; options(repos = r)' \
+# or sudo Rscript -e "options(repos = 'https://cloud.r-project.org/')"
 # but settings are not saved in different instances of the console.
 RUN \
-  sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' ; \
-  sudo Rscript -e 'update.packages(ask = FALSE,repos = "http://cran.us.r-project.org")'
+  sudo Rscript -e 'install.packages("devtools",repos = "https://cloud.r-project.org/")' ; \
+  sudo Rscript -e 'update.packages(ask = FALSE,repos = "https://cloud.r-project.org/")'
 
 # Check if there are apt or r packages to be upgraded
 #RUN \
