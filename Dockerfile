@@ -26,12 +26,13 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 # git ssh tar gzip ca-certificates are needed for circleci : https://circleci.com/docs/2.0/custom-images/#required-tools-for-primary-containers
 # curl is needed for remote trigger the checks
 
+#sudo Rscript -e 'getOption("repos")'; \
+#sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r); getOption("repos")' \
+  
 RUN \
-  sudo Rscript -e 'getOption("repos")'; \
-  sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r); getOption("repos")' \
   sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
 RUN \
-  sudo Rscript -e 'getOption("repos"); update.packages(ask = FALSE)'
+  sudo Rscript -e 'getOption("repos"); update.packages(ask = FALSE,repos = "http://cran.us.r-project.org")'
 
 
 RUN \
