@@ -26,15 +26,6 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 # git ssh tar gzip ca-certificates are needed for circleci : https://circleci.com/docs/2.0/custom-images/#required-tools-for-primary-containers
 # curl is needed for remote trigger the checks
 
-#sudo Rscript -e 'getOption("repos")'; \
-#sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r); getOption("repos")' \
-  
-RUN \
-  sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
-RUN \
-  sudo Rscript -e 'getOption("repos"); update.packages(ask = FALSE,repos = "http://cran.us.r-project.org")'
-
-
 RUN \
   apt-get update -qq && \
   apt-get install -y -qq --no-install-recommends \
@@ -75,11 +66,12 @@ RUN \
 # Last lines delete temporary files and cache
 
 # Set the default repository for CRAN and install devtools
+# The default is @CRAN@. It can be changed with:
 # sudo Rscript -e 'r = getOption("repos"); r["CRAN"] = "http://cran.us.r-project.org" ; options(repos = r)' \
-#RUN \
-#    sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' 
-#RUN \
-#    sudo Rscript -e 'update.packages(ask = FALSE)'
+# but settings are not saved in different instances of the console.
+RUN \
+  sudo Rscript -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")' ; \
+  sudo Rscript -e 'update.packages(ask = FALSE,repos = "http://cran.us.r-project.org")'
 
 # Check if there are apt or r packages to be upgraded
 #RUN \
