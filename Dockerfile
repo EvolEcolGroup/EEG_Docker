@@ -1,26 +1,22 @@
 # Pull base image
 # To install, use the explicit LTS tag---currently 18.04---when pulling
-# https://hub.docker.com/r/rocker/r-ubuntu
-#FROM rocker/r-ubuntu:18.04 
-FROM rstudio/r-base:4.0.2-bionic 
-#FROM manicaeeg/eeg-docker:latest # rstudio/r-base:x.y.z-distro, see https://github.com/rstudio/r-docker
+FROM rstudio/r-base:3.6-bionic 
+# rstudio/r-base:x.y.z-distro, see https://github.com/rstudio/r-docker
 # This docker is available at https://hub.docker.com/repository/docker/manicaeeg/eeg-docker
 
-
-ARG BUILD_DATE
+ARG BUILD_DATE 
 ARG VCS_REF
 # ARG IMG_DIST
 # ARG BUILD_VERSION
 
 # Labels
-LABEL maintainer="Gian Luigi Somma"
-LABEL org.label-schema.schema-version = "1.0"
-LABEL org.label-schema.name = "EEG-Docker"
-LABEL org.label-schema.description = "A Ubuntu LTS Docker with R for EEG projects"
-LABEL org.label-schema.vcs="https://github.com/EvolEcolGroup/EEG_Docker/"
-
-LABEL org.label-schema.build-date=$BUILD_DATE
-LABEL org.label-schema.vcs-ref=$VCS_REF 
+LABEL maintainer="Gian Luigi Somma" \
+      org.label-schema.schema-version="1.1" \
+      org.label-schema.name="EEG-Docker" \
+      org.label-schema.description="A Ubuntu LTS Docker with R for EEG projects" \
+      org.label-schema.vcs="https://github.com/EvolEcolGroup/EEG_Docker/" \
+      org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.vcs-ref=$VCS_REF 
 #LABEL org.label-schema.version = $BUILD_VERSION
 
 # git ssh tar gzip ca-certificates are needed for circleci : https://circleci.com/docs/2.0/custom-images/#required-tools-for-primary-containers

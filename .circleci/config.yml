@@ -14,8 +14,9 @@ version: 2.1
 
 # ********** ********** ********** ********** ********** ********** ********** ********** #
 
-# Pipeline parameter to run conditional workflows - 21 April 2020
+# Pipeline parameters
 parameters:
+  # to run conditional workflows - 21 April 2020
   run_on_commit:
     type: boolean
     default: true
@@ -27,15 +28,18 @@ parameters:
   run_to_test_img:
     type: boolean
     default: false
-
-
+    
 # Code references 
 refernces:
 
 # Common environmental variables
   env_vars: &env_vars
-    IMAGE_NAME: eeg-docker    # Name of the project on docker
-    IMAGE_TAG: r-v4     #  Docker version tag
+    #IMAGE_TAG: << pipeline.parameters.IMAGE_TAG >>
+    #REPO_NAME: << pipeline.parameters.REPO_NAME >>
+    #IMAGE_NAME: << pipeline.parameters.IMAGE_NAME >>
+    IMAGE_TAG: ubuntu18.04r3.6     #  Docker version tag :$IMAGE_TAG
+    REPO_NAME: eeg-docker
+    #IMAGE_NAME: $DOCKER_USERNAME/$REPO_NAME # Concat not working  # Name of the project on docker
 
 # Code for building and push the docker to docker.com
   build_docker: &build_docker
@@ -46,9 +50,13 @@ refernces:
           docker build ./ --no-cache=true  \
             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
-            -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+            -t $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG 
+          docker push $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
+          
+          # Add here additional tags
+          #docker tag $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG $DOCKER_USERNAME/$REPO_NAME:latest
+          #docker push $DOCKER_USERNAME/$REPO_NAME:latest 
 
           # docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_PASSWORD
       #--build-arg BUILD_VERSION=${build_version} \  
@@ -104,7 +112,7 @@ jobs:
 # Pull the image and test if it works.      
   test_image:
     docker:
-      - image: $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG # Require env_vars
+      - image: $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG # Require pipeline parameters
     environment:
       <<: *env_vars # Import here the env_variables. They are used in the name of the docker image
     steps:
@@ -113,7 +121,7 @@ jobs:
  # Check if an update of docker is needed, if so run the build_deploy_docker job      
   check_update_docker: 
     docker:
-      - image: $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+      - image: $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
     environment:
       <<: *env_vars # Import here the env_variables. They are used in the name of the docker image and in the building process
     steps:
