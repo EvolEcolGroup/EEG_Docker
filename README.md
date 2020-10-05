@@ -30,7 +30,7 @@ You can download `latest` image with
 
 Image            | Description                               | Size   | Metrics | Build status 
 ---------------- | ----------------------------------------- | ------ | ------- | --------------
-[latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main docker | ![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic) | ![](https://img.shields.io/docker/pulls/manicaeeg/eeg-docker?style=plastic) | ![](https://img.shields.io/docker/automated/manicaeeg/eeg-docker?style=plastic)
+[latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main docker | [![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic)](#) | [![](https://img.shields.io/docker/pulls/manicaeeg/eeg-docker?style=plastic)](#) | [![](https://img.shields.io/docker/automated/manicaeeg/eeg-docker?style=plastic)](#)
 
 Additional statistics on the images can be found on the [Docker](https://hub.docker.com/r/manicaeeg/eeg-docker) and [Micro Badger](* [Micro Badger](https://microbadger.com/images/manicaeeg/eeg-docker)) wesbsites.
 
@@ -42,9 +42,9 @@ You can download one of the following tagged images with
 
 Tag Name        | Description                               |Ubuntu | R version | Size   | Layers
 ---------------- | ----------------------------------------- | -------- | ------| ------- | ------- 
-[latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main image | 18.04 | 4.0 |![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic) | ![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/latest?style=plastic) 
-[ubuntu18.04r3.6](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Legacy tag with R version 3.6 | 18.04 | 3.6 | ![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu18.04r3.6?style=plastic) | ![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/ubuntu18.04r3.6?style=plastic)
-[ubuntu18.04r4.0](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | As `latest` | 18.04 | 4.0 |![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu18.04r4.0?style=plastic) | ![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/ubuntu18.04r4.0?style=plastic) 
+[latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main image | 18.04 | 4.0 |[![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic)](#) | [![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/latest?style=plastic)](#)
+[ubuntu18.04r3.6](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Legacy tag with R version 3.6 | 18.04 | 3.6 | [![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu18.04r3.6?style=plastic)](#) | [![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/ubuntu18.04r3.6?style=plastic)](#)
+[ubuntu18.04r4.0](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | As `latest` | 18.04 | 4.0 |![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu18.04r4.0?style=plastic) | [![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/ubuntu18.04r4.0?style=plastic)](#)
 
 
 [comment]: <> (## Built With)
@@ -68,7 +68,50 @@ Url for those tests (on circleci) are not posted here since a new manual jobs wi
 
 ## New dockers
 
-If a new docker needs to be created, remember to change its name and tag in the `config.yml` so to upload it to docker with a new name/tag.
+If a new docker needs to be created, remember to change its name and tag in the  `Dockerfile` and `config.yml` so to upload it to docker with a new name/tag. 
+
+### Update the Dockerfile
+
+Example: change Version of r from 3.6. to 4.0 and from Ubuntu 18.04 (bionic) to 20.04 (focal):
+
+```
+FROM rstudio/r-base:3.6-bionic 
+FROM rstudio/r-base:4.0-focal 
+```
+
+For more information see the [r-docker repo readme](https://github.com/rstudio/r-docker)
+
+If you implement other changes, you might want also to update the metatag on the version few lines below:
+
+```
+LABEL org.label-schema.schema-version="1.1" \
+```
+### Update config.yml
+
+Example: change Version of r from 3.6. to 4.0 and from Ubuntu 18.04 (bionic) to 20.04 (focal).
+Find the line where the `IMAGE_TAG` is defined:
+```
+# Common environmental variables
+  env_vars: &env_vars
+    IMAGE_TAG: ubuntu18.04r3.6     #  Docker version tag :$IMAGE_TAG
+    REPO_NAME: eeg-docker
+```
+and replace it with the new tag in the form of `ubuntu`+ubuntu_version+`r`+r_version. E.g. 
+```
+    IMAGE_TAG: ubuntu20.04r4.0     #  Docker version tag :$IMAGE_TAG
+```
+
+Remember to comment the lines associating the `latest` tag in the older version, while keep it uncommented only in you latest release. 
+```
+# Add here additional tags for the "latest" release
+docker tag $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG $DOCKER_USERNAME/$REPO_NAME:latest
+docker push $DOCKER_USERNAME/$REPO_NAME:latest 
+```
+Otherwise, if they are kept uncommented in the older one, and that repo get rebuilt, it would overwrite (and push to docker.com) the actual latest image with the older one.
+
+### Update the readme
+
+Lastly, remember to update this readme.md file to include the new tag in the tag-table. Information on the number of layers comes from [Micro Badger](https://microbadger.com/images/manicaeeg/eeg-docker) that checks and update periodically (i.e. not in real time) the images. Therefore, do not worry if a `no found` layer badge is displayed. You can manually check the number of layers in the [Tags Page](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/tags) of the   Docker/EEG-Docker website, clicking on the tagged image you are interested.
 
 ## First build from new repository branch or new docker 
 The first automatic `update_docker` job on the continuous integration will fail becuse there is not yet an image to update.
