@@ -5,16 +5,18 @@ version: 2.1
 # Requirements:
 #
 # Make sure to set envirnomental variables in circle ci (or as resources in your organization's org-global Context):  
-# - DOCKER_USERNAME : the username  used on docker.com
-# - DOCKER_PASSWORD : the password  used on docker.com
-# - DOCKER_TOKEN    : a Circleci personal o Project API token (https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token)
-# - DOCKER_TOKEN_PERSONAL_AM: a Circleci personal API token - A personal one is needed to trigger workflows with API v2. (The value is added in the project environment variables)
+# - DOCKER_USERNAME: the username  used on docker.com
+# - DOCKER_PASSWORD: the password  used on docker.com
+# - DOCKER_TOKEN_PERSONAL_AM: a Circleci personal API token - A personal one is needed to trigger workflows with API v2. 
+#                     (The value is added in the project environment variables)
+#                     (https://circleci.com/docs/2.0/managing-api-tokens/#creating-a-personal-api-token)
 # ********** ********** ********** ********** ********** ********** ********** ********** #
 
 # ********** ********** ********** ********** ********** ********** ********** ********** #
 
-# Pipeline parameter to run conditional workflows - 21 April 2020
+# Pipeline parameters
 parameters:
+  # to run conditional workflows - 21 April 2020
   run_on_commit:
     type: boolean
     default: true
@@ -26,15 +28,18 @@ parameters:
   run_to_test_img:
     type: boolean
     default: false
-
-
+    
 # Code references 
 refernces:
 
 # Common environmental variables
   env_vars: &env_vars
-    IMAGE_NAME: eeg-docker    # Name of the project on docker
-    IMAGE_TAG: latest     #  Docker version tag
+    #IMAGE_TAG: << pipeline.parameters.IMAGE_TAG >>
+    #REPO_NAME: << pipeline.parameters.REPO_NAME >>
+    #IMAGE_NAME: << pipeline.parameters.IMAGE_NAME >>
+    IMAGE_TAG: ubuntu18.04r3.6     #  Docker version tag :$IMAGE_TAG
+    REPO_NAME: eeg-docker
+    #IMAGE_NAME: $DOCKER_USERNAME/$REPO_NAME # Concat not working  # Name of the project on docker
 
 # Code for building and push the docker to docker.com
   build_docker: &build_docker
@@ -45,9 +50,13 @@ refernces:
           docker build ./ --no-cache=true  \
             --build-arg VCS_REF=$(git rev-parse --short HEAD) \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
-            -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+            -t $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG 
+          docker push $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
+          
+          # Add here additional tags
+          #docker tag $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG $DOCKER_USERNAME/$REPO_NAME:latest
+          #docker push $DOCKER_USERNAME/$REPO_NAME:latest 
 
           # docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_PASSWORD
       #--build-arg BUILD_VERSION=${build_version} \  
@@ -80,7 +89,7 @@ refernces:
         apt2upg=$( sudo apt-get -s dist-upgrade | grep -Po "^[[:digit:]]+ (?=upgraded)" ) 
 
         # Check if there are old r packages to be upgraded. If not convert NULL to 0
-        r2upg=$( sudo Rscript -e ' r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)'  )
+        r2upg=$( sudo Rscript -e "options(repos = 'https://cloud.r-project.org/'); r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)"  )
 
         # Print information
         printf "Pakages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
@@ -103,7 +112,7 @@ jobs:
 # Pull the image and test if it works.      
   test_image:
     docker:
-      - image: $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG # Require env_vars
+      - image: $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG # Require pipeline parameters
     environment:
       <<: *env_vars # Import here the env_variables. They are used in the name of the docker image
     steps:
@@ -112,7 +121,7 @@ jobs:
  # Check if an update of docker is needed, if so run the build_deploy_docker job      
   check_update_docker: 
     docker:
-      - image: $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+      - image: $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
     environment:
       <<: *env_vars # Import here the env_variables. They are used in the name of the docker image and in the building process
     steps:
@@ -128,7 +137,7 @@ jobs:
               apt2upg=$( sudo apt-get -s dist-upgrade | grep -Po "^[[:digit:]]+ (?=upgraded)" ) 
 
               # Check if there are old r packages to be upgraded. If not convert NULL to 0
-              r2upg=$( sudo Rscript -e ' r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)'  )
+              r2upg=$( sudo Rscript -e "options(repos = 'https://cloud.r-project.org/'); r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)"  )
 
               # Print information
               printf "Pakages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
