@@ -1,6 +1,6 @@
 # Pull base image
 # To install, use the explicit LTS tag---currently 18.04---when pulling
-FROM rstudio/r-base:3.6-bionic 
+FROM rstudio/r-base:4.0-bionic 
 # rstudio/r-base:x.y.z-distro, see https://github.com/rstudio/r-docker
 # This docker is available at https://hub.docker.com/repository/docker/manicaeeg/eeg-docker
 

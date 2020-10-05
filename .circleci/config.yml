@@ -34,10 +34,7 @@ refernces:
 
 # Common environmental variables
   env_vars: &env_vars
-    #IMAGE_TAG: << pipeline.parameters.IMAGE_TAG >>
-    #REPO_NAME: << pipeline.parameters.REPO_NAME >>
-    #IMAGE_NAME: << pipeline.parameters.IMAGE_NAME >>
-    IMAGE_TAG: ubuntu18.04r3.6     #  Docker version tag :$IMAGE_TAG
+    IMAGE_TAG: ubuntu18.04r4.0 #  Docker version tag :$IMAGE_TAG
     REPO_NAME: eeg-docker
     #IMAGE_NAME: $DOCKER_USERNAME/$REPO_NAME # Concat not working  # Name of the project on docker
 
@@ -54,9 +51,9 @@ refernces:
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
           
-          # Add here additional tags
-          #docker tag $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG $DOCKER_USERNAME/$REPO_NAME:latest
-          #docker push $DOCKER_USERNAME/$REPO_NAME:latest 
+          # Add here additional tags for the "latest" release
+          docker tag $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG $DOCKER_USERNAME/$REPO_NAME:latest
+          docker push $DOCKER_USERNAME/$REPO_NAME:latest 
 
           # docker login -u $DOCKER_USERNAME --password-stdin $DOCKER_PASSWORD
       #--build-arg BUILD_VERSION=${build_version} \  
