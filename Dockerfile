@@ -23,9 +23,9 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 #LABEL org.label-schema.version = $BUILD_VERSION
 
 RUN \
-   apt-get install software-properties-common && \
-   apt-get update -qq 
-
+   apt-get update -qq && \
+   apt-get install software-properties-common 
+   
 # Add required ppa address for updating the packages
 RUN \
   add-apt-repository ppa:openjdk-r/ppa && \
