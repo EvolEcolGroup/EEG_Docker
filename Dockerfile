@@ -56,7 +56,7 @@ RUN \
 
 RUN \
 #    sudo Rscript -e 'install.packages("devtools")' && \
-    sudo Rscript -e 'devtools::install_github("hadley/devtools")' && \
+#    sudo Rscript -e 'devtools::install_github("hadley/devtools")' && \
     sudo Rscript -e 'update.packages(ask = FALSE)' 
     
 
