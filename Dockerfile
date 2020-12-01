@@ -23,7 +23,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 #LABEL org.label-schema.version = $BUILD_VERSION
 
 RUN \
-   apt-get update -qq && \
+   apt-get update -q -y && \
    apt-get install software-properties-common 
    
 # Add required ppa address for updating the packages
