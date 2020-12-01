@@ -26,7 +26,7 @@ LABEL org.label-schema.vcs-ref=$VCS_REF
 RUN \
   add-apt-repository ppa:openjdk-r/ppa && \
   add-apt-repository ppa:ubuntugis/ppa && \
-  add-apt-repository ppa:cran/imagemagick-dev && \
+#  add-apt-repository ppa:cran/imagemagick-dev && \
   apt-get update -qq     
   
 # Install Java  
@@ -51,7 +51,7 @@ RUN \
 # Last three lines delete temporary files and cache
 
 RUN \
-    sudo Rscript -e 'install.packages("devtools")' && \
+#    sudo Rscript -e 'install.packages("devtools")' && \
     sudo Rscript -e 'devtools::install_github("hadley/devtools")' && \
     sudo Rscript -e 'update.packages(ask = FALSE)' 
     
