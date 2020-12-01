@@ -22,11 +22,15 @@ LABEL org.label-schema.build-date=$BUILD_DATE
 LABEL org.label-schema.vcs-ref=$VCS_REF 
 #LABEL org.label-schema.version = $BUILD_VERSION
 
+RUN \
+   apt-get install software-properties-common && \
+   apt-get update -qq 
+
 # Add required ppa address for updating the packages
 RUN \
   add-apt-repository ppa:openjdk-r/ppa && \
   add-apt-repository ppa:ubuntugis/ppa && \
-#  add-apt-repository ppa:cran/imagemagick-dev && \
+  add-apt-repository ppa:cran/imagemagick-dev && \
   apt-get update -qq     
   
 # Install Java  
