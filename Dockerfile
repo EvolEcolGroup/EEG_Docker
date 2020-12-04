@@ -55,6 +55,10 @@ RUN \
     sudo \
     tar  \
     valgrind \
+    libudunits2-dev \
+    libgdal-dev \
+    libgeos-dev \
+    libproj-dev \
   && \  
   sudo apt-get autoremove -y && \
   sudo apt-get clean  \
