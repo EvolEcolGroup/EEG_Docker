@@ -38,6 +38,7 @@ RUN \
     curl \
     doxygen \
     git \ 
+    libgit2-dev \
     graphviz \
     gzip \
     libboost-all-dev \
