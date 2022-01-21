@@ -60,6 +60,9 @@ RUN \
     libgdal-dev \
     libgeos-dev \
     libproj-dev \
+    libfontconfig1-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
   && \  
   sudo apt-get autoremove -y && \
   sudo apt-get clean  \
@@ -75,6 +78,7 @@ RUN \
   sudo Rscript -e 'install.packages("devtools",repos = "https://cloud.r-project.org/")' ; \
   sudo Rscript -e 'install.packages("rmarkdown",repos = "https://cloud.r-project.org/")' ; \
   sudo Rscript -e 'install.packages("covr",repos = "https://cloud.r-project.org/")' ; \
+  sudo Rscript -e 'install.packages("pkgdown",repos = "https://cloud.r-project.org/")' ; \
   sudo Rscript -e 'update.packages(ask = FALSE,repos = "https://cloud.r-project.org/")'
 
 # Check if there are apt or r packages to be upgraded
