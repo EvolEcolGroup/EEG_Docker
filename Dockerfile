@@ -45,6 +45,7 @@ RUN \
     libgsl-dev \
     libnetcdf-c++4-dev \
     libnetcdf-dev \
+    libnlopt-dev \
     libssl-dev \
     libxml2-dev \
     netcdf-bin \
@@ -79,6 +80,7 @@ RUN \
   sudo Rscript -e 'install.packages("rmarkdown",repos = "https://cloud.r-project.org/")' ; \
   sudo Rscript -e 'install.packages("covr",repos = "https://cloud.r-project.org/")' ; \
   sudo Rscript -e 'install.packages("pkgdown",repos = "https://cloud.r-project.org/")' ; \
+  sudo Rscript -e 'install.packages("nloptr",repos = "https://cloud.r-project.org/")' ; \
   sudo Rscript -e 'update.packages(ask = FALSE,repos = "https://cloud.r-project.org/")'
 
 # Check if there are apt or r packages to be upgraded
