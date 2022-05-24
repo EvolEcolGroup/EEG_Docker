@@ -34,7 +34,7 @@ refernces:
 
 # Common environmental variables
   env_vars: &env_vars
-    IMAGE_TAG: ubuntu18.04r4.0 #  Docker version tag :$IMAGE_TAG
+    IMAGE_TAG: ubuntu20.04r4.2 #  Docker version tag :$IMAGE_TAG
     REPO_NAME: eeg-docker
     #IMAGE_NAME: $DOCKER_USERNAME/$REPO_NAME # Concat not working  # Name of the project on docker
 
