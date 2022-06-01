@@ -40,8 +40,8 @@ You can download one of the following tagged images with
 
 ```docker pull manicaeeg/eeg-docker:tag_name```
 
-Tag Name        | Description                               |Ubuntu | R version | Size
----------------- | ----------------------------------------- | -------- | ------| -------  
+Tag Name         | Description                  | Ubuntu   | R version | Size 
+---------------- | ---------------------------- | -------- | --------- | -------
 [latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main image | 20.04 | 4.2 |[![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic)](#)
 [ubuntu20.04r4.2](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | As `latest` | 20.04 | 4.2 |[![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu20.04r4.2?style=plastic)](#)
 
