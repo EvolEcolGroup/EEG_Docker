@@ -97,6 +97,8 @@ jobs:
 
 # Main job to build and push the image to docker.com
   build_deploy_docker:
+    machine:
+      image: ubuntu-2004:202201-01
     environment:
       <<: *env_vars # Import here the env_variables. They are used in the building process
     steps:
@@ -177,7 +179,9 @@ jobs:
       # - *check_pagkages
       
 # Test the curl_trigger: execute the curl trigger without performing the checks on the packages
-  test_curl_trigger:  
+  test_curl_trigger:
+    machine: 
+      image: ubuntu-2004:202201-01
     environment:
       <<: *env_vars # Import here the configuration parameters
     steps:
