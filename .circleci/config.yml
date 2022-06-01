@@ -97,8 +97,6 @@ jobs:
 
 # Main job to build and push the image to docker.com
   build_deploy_docker:
-    machine: 
-      image: circleci/classic:latest
     environment:
       <<: *env_vars # Import here the env_variables. They are used in the building process
     steps:
@@ -180,8 +178,6 @@ jobs:
       
 # Test the curl_trigger: execute the curl trigger without performing the checks on the packages
   test_curl_trigger:  
-    machine: 
-        image: circleci/classic:latest
     environment:
       <<: *env_vars # Import here the configuration parameters
     steps:
