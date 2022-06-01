@@ -3,12 +3,12 @@
 Welcome to the docker repository of the [Evolutionary Ecology Group (EEG)](http://www.eeg.zoo.cam.ac.uk/) - [Zoology Department](http://www.zoo.cam.ac.uk), [Cambridge University](http://www.cam.ac.uk).
 
 This project creates a Ubuntu docker image and pushes it to docker.com.
-The image is based on Ubuntu LTS a r (various versions). In addition, several apt and r packages are pre-installed so to run continuous integration on EEG projects using CircleCI. 
+The image is based on Ubuntu LTS and `R`. In addition, several `apt` and `R` packages are pre-installed so to run continuous integration on EEG projects using CircleCI. 
 The docker is pubicly available at: https://hub.docker.com/r/manicaeeg/eeg-docker. 
 
 ## Getting Started
 
-The images are based on [rstudio/r-docker](https://github.com/rstudio/r-docker) based on Ubuntu 18.04 LTS with r version 4 (or 3.6 as legacy image). In addition, several apt and r packages are pre-installed so to run continuous integration on EEG projects using CircleCI. The dockers are generated and updated via a publicly available GitHub repository: https://github.com/EvolEcolGroup/EEG_Docker
+The images are based on [rstudio/r-docker](https://github.com/rstudio/r-docker) based on Ubuntu 20.04 LTS with r version 4.2. In addition, several `apt` and `R` packages are pre-installed so to run continuous integration on EEG projects using CircleCI. The dockers are generated and updated via a publicly available GitHub repository: https://github.com/EvolEcolGroup/EEG_Docker
 
 
 ### Prerequisities
@@ -32,7 +32,7 @@ Image            | Description                               | Size   | Metrics 
 ---------------- | ----------------------------------------- | ------ | ------- | --------------
 [latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main docker | [![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic)](#) | [![](https://img.shields.io/docker/pulls/manicaeeg/eeg-docker?style=plastic)](#) | [![](https://img.shields.io/docker/automated/manicaeeg/eeg-docker?style=plastic)](#)
 
-Additional statistics on the images can be found on the [Docker](https://hub.docker.com/r/manicaeeg/eeg-docker) and [Micro Badger](* [Micro Badger](https://microbadger.com/images/manicaeeg/eeg-docker)) wesbsites.
+Additional statistics on the images can be found on the [Docker](https://hub.docker.com/r/manicaeeg/eeg-docker)
 
 ## Available Tags
 
@@ -40,18 +40,17 @@ You can download one of the following tagged images with
 
 ```docker pull manicaeeg/eeg-docker:tag_name```
 
-Tag Name        | Description                               |Ubuntu | R version | Size   | Layers
+Tag Name        | Description                               |Ubuntu | R version | Size
 ---------------- | ----------------------------------------- | -------- | ------| ------- | ------- 
-[latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main image | 18.04 | 4.0 |[![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic)](#) | [![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/latest?style=plastic)](#)
-[ubuntu18.04r3.6](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Legacy tag with R version 3.6 | 18.04 | 3.6 | [![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu18.04r3.6?style=plastic)](#) | [![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/ubuntu18.04r3.6?style=plastic)](#)
-[ubuntu18.04r4.0](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | As `latest` | 18.04 | 4.0 |![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu18.04r4.0?style=plastic) | [![](https://img.shields.io/microbadger/layers/manicaeeg/eeg-docker/ubuntu18.04r4.0?style=plastic)](#)
+[latest](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | Main image | 20.04 | 4.2 |[![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/latest?style=plastic)](#)
+[ubuntu20.04r4.2](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/) | As `latest` | 20.04 | 4.2 |[![](https://img.shields.io/docker/image-size/manicaeeg/eeg-docker/ubuntu20.04r4.2?style=plastic)](#)
 
 
 [comment]: <> (## Built With)
 [comment]: <> (List the software and the version numbers that are in this container v0.3.2)
 
-In the `latest image`, Apt and R packages are automatically updated at the beginning of each month.
-In addition to the packages found in the base [rstudio/r-docker](https://github.com/rstudio/r-docker), the additinal installed `apt` and `R` packages are listed in the [Dockerfile](https://github.com/EvolEcolGroup/EEG_Docker/blob/master/Dockerfile).
+In the `latest` image, `apt` and `R` packages are automatically updated at the beginning of each month.
+In addition to the packages found in the base [rstudio/r-docker](https://github.com/rstudio/r-docker), the additional installed `apt` and `R` packages are listed in the [Dockerfile](https://github.com/EvolEcolGroup/EEG_Docker/blob/master/Dockerfile).
 
 ## Run docker locally
 
@@ -134,8 +133,8 @@ For the versions available, see the [tags on this repository](https://github.com
 
 ## Authors
 
-* **Andrea Manica** - *PI*, *Contributor* - [GitHub](https://github.com/dramanica)
-* **Gian Luigi Somma** - *Initial work* , *Mantainer* - [GitHub](https://github.com/orion434)
+* **Andrea Manica** - *PI*, *Contributor*, *Mantainer* - [GitHub](https://github.com/dramanica)
+* **Gian Luigi Somma** - *Initial work*  - [GitHub](https://github.com/orion434)
 
 See also the list of [contributors](https://github.com/EvolEcolGroup/EEG_Docker/graphs/contributors) who 
 participated in this project.
