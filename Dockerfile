@@ -30,7 +30,6 @@ RUN \
 RUN \
   add-apt-repository ppa:openjdk-r/ppa && \
   add-apt-repository ppa:ubuntugis/ppa && \
-  add-apt-repository ppa:cran/imagemagick-dev && \
   apt-get update -qq     
   
 # Install Java  
