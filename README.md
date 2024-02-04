@@ -4,16 +4,16 @@ Welcome to the docker repository of the [Evolutionary Ecology Group (EEG)](http:
 
 This project creates a Ubuntu docker image and pushes it to docker.com.
 The image is based on Ubuntu LTS and `R`. In addition, several `apt` and `R` packages are pre-installed so to run continuous integration on EEG projects using CircleCI. 
-The docker is pubicly available at: https://hub.docker.com/r/manicaeeg/eeg-docker. 
+The docker is publicly available at: https://hub.docker.com/r/manicaeeg/eeg-docker. 
 
 ## Getting Started
 
 The images are based on [rstudio/r-docker](https://github.com/rstudio/r-docker) based on Ubuntu 20.04 LTS with r version 4.2. In addition, several `apt` and `R` packages are pre-installed so to run continuous integration on EEG projects using CircleCI. The dockers are generated and updated via a publicly available GitHub repository: https://github.com/EvolEcolGroup/EEG_Docker
 
 
-### Prerequisities
+### Prerequisites
 
-In order to run this container, you will need docker installed. Based on you OS, you can install it and read a quick guide on the docker.com website:
+In order to run this container, you will need docker installed. Based on your OS, you can install it and read a quick guide on the docker.com website:
 
 * [Windows](https://docs.docker.com/windows/started)
 * [OS X](https://docs.docker.com/mac/started/)
@@ -63,7 +63,7 @@ At every commit a test "update_docker" is run, while another two tests are set o
 - manual_build_deploy_docker
 - manual_test_image
 
-Url for those tests (on circleci) are not posted here since a new manual jobs will be created at each commit. Please, do not bookmark the manual jobs, otherwise you will re-run older version of the repository.
+Urla for those tests (on CircleCi) are not posted here since a new manual job will be created at each commit. Please, do not bookmark the manual jobs, otherwise you will re-run the older version of the repository.
 
 ## New dockers
 
@@ -100,21 +100,21 @@ and replace it with the new tag in the form of `ubuntu`+ubuntu_version+`r`+r_ver
     IMAGE_TAG: ubuntu20.04r4.0     #  Docker version tag :$IMAGE_TAG
 ```
 
-Remember to comment the lines associating the `latest` tag in the older version, while keep it uncommented only in you latest release. 
+Remember to comment the lines associating the `latest` tag in the older version, while keeping it uncommented only in your latest release. 
 ```
 # Add here additional tags for the "latest" release
 docker tag $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG $DOCKER_USERNAME/$REPO_NAME:latest
 docker push $DOCKER_USERNAME/$REPO_NAME:latest 
 ```
-Otherwise, if they are kept uncommented in the older one, and that repo get rebuilt, it would overwrite (and push to docker.com) the actual latest image with the older one.
+Otherwise, if they are kept uncommented in the older one, and that repo gets rebuilt, it would overwrite (and push to docker.com) the actual latest image with the older one.
 
 ### Update the readme
 
-Lastly, remember to update this readme.md file to include the new tag in the tag-table. Information on the number of layers comes from [Micro Badger](https://microbadger.com/images/manicaeeg/eeg-docker) that checks and update periodically (i.e. not in real time) the images. Therefore, do not worry if a `no found` layer badge is displayed. You can manually check the number of layers in the [Tags Page](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/tags) of the   Docker/EEG-Docker website, clicking on the tagged image you are interested.
+Lastly, remember to update this readme.md file to include the new tag in the tag-table. Information on the number of layers comes from [Micro Badger](https://microbadger.com/images/manicaeeg/eeg-docker) that checks and updates periodically (i.e. not in real-time) the images. Therefore, do not worry if a `no found` layer badge is displayed. You can manually check the number of layers in the [Tags Page](https://hub.docker.com/repository/docker/manicaeeg/eeg-docker/tags) of the   Docker/EEG-Docker website, by clicking on the tagged image you are interested in.
 
 ## First build from new repository branch or new docker 
-The first automatic `update_docker` job on the continuous integration will fail becuse there is not yet an image to update.
-Indeed, the first build of each new branch needs to be manually triggered with the `manual_build_deploy_docker` job from CircleCi website. If there are no errors, the image is built and push and all the following commits should sucessfully trigger the `update_docker` job.
+The first automatic `update_docker` job on the continuous integration will fail because there is not yet an image to update.
+Indeed, the first build of each new branch needs to be manually triggered with the `manual_build_deploy_docker` job from CircleCi website. If there are no errors, the image is built and push and all the following commits should successfully trigger the `update_docker` job.
 
 ## Find Us
 
@@ -142,7 +142,7 @@ participated in this project.
 ## License
 
 [comment]: <> (This project is licensed under the MIT License - )
-See the [LICENSE.md](https://github.com/EvolEcolGroup/EEG_Docker/LICENSE.md) file for details.
+See the [LICENSE](https://github.com/EvolEcolGroup/EEG_Docker/LICENSE) file for details.
 
 ## Acknowledgments
 
