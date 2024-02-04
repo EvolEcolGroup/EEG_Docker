@@ -63,7 +63,7 @@ At every commit a test "update_docker" is run, while another two tests are set o
 - manual_build_deploy_docker
 - manual_test_image
 
-Urla for those tests (on CircleCi) are not posted here since a new manual job will be created at each commit. Please, do not bookmark the manual jobs, otherwise you will re-run the older version of the repository.
+Urls for those tests (on CircleCi) are not posted here since a new manual job will be created at each commit. Please, do not bookmark the manual jobs, otherwise you will re-run the older version of the repository.
 
 ## New dockers
 
