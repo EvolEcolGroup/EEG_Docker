@@ -4,7 +4,7 @@ version: 2.1
 # ********** ********** ********** ********** ********** ********** ********** ********** #
 # Requirements:
 #
-# Make sure to set envirnomental variables in circle ci (or as resources in your organization's org-global Context):  
+# Make sure to set environmental variables in circle ci (or as resources in your organization's org-global Context):  
 # - DOCKER_USERNAME: the username  used on docker.com
 # - DOCKER_PASSWORD: the password  used on docker.com
 # - DOCKER_TOKEN_PERSONAL_AM: a Circleci personal API token - A personal one is needed to trigger workflows with API v2. 
@@ -30,7 +30,7 @@ parameters:
     default: false
     
 # Code references 
-refernces:
+references:
 
 # Common environmental variables
   env_vars: &env_vars
@@ -85,11 +85,11 @@ refernces:
         # Check if there are apt packages to be upgraded
         apt2upg=$( sudo apt-get -s dist-upgrade | grep -Po "^[[:digit:]]+ (?=upgraded)" ) 
 
-        # Check if there are old r packages to be upgraded. If not convert NULL to 0
+        # Check if there are old r packages to be upgraded. If not, convert NULL to 0
         r2upg=$( sudo Rscript -e "options(repos = 'https://cloud.r-project.org/'); r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)"  )
 
         # Print information
-        printf "Pakages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
+        printf "Packages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
 
 # ********** ********** ********** ********** ********** ********** ********** ********** #
 # JOBS
@@ -115,7 +115,7 @@ jobs:
     steps:
       - *check_pagkages # Prevent the variables to be read from later text. Variables definition moved in the deploy block
       
- # Check if an update of docker is needed, if so run the build_deploy_docker job      
+ # Check if an update of docker is needed; if so, run the build_deploy_docker job      
   check_update_docker: 
     docker:
       - image: $DOCKER_USERNAME/$REPO_NAME:$IMAGE_TAG
@@ -127,7 +127,7 @@ jobs:
       #- *check_pagkages # Prevent the variables to be read from later text. Variables definition moved in the deploy block
   
       - deploy: 
-          name: Check if docker need to be updated (based on packages upgrade list)
+          name: Check if docker needs to be updated (based on packages upgrade list)
           command: |
 
               # Check if there are apt packages to be upgraded
@@ -137,7 +137,7 @@ jobs:
               r2upg=$( sudo Rscript -e "options(repos = 'https://cloud.r-project.org/'); r_upg <-nrow( old.packages() ) ; if ( is.null(r_upg) ) { r_upg =0 }  ; cat(r_upg)"  )
 
               # Print information
-              printf "Pakages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
+              printf "Packages to be upgraded: \n apt: $apt2upg  \n r  : $r2upg \n"
 
               # Check if either (apt or r) packages need to be upgraded are >0 then echo info + rebuild the docker
               if [  "$apt2upg" -gt 0 ] || [  "$r2upg" -gt 0 ] ; then
@@ -173,7 +173,7 @@ jobs:
                   #"branch": $CIRCLE_BRANCH,  "revision": "$CIRCLE_SHA1"
 
               else
-                printf "All packages already up to date. No further action required. \n" 
+                printf "All packages already up to date. No further action is required. \n" 
               fi
       - run:  echo "End of script."
       # - *check_pagkages
@@ -199,7 +199,7 @@ workflows:
           type: approval # requires that an in-app button be clicked by an appropriate member of the pr
 
       - test_curl_trigger:     
-      # - test_image:  # Only run test on sucessfully builds
+      # - test_image:  # Only run test on successful builds
           requires:
           - wait_manual_approval
 
@@ -213,7 +213,7 @@ workflows:
           requires:
           - wait_manual_approval
   
-      # - test_image:  # Only run test on sucessfully builds
+      # - test_image:  # Only run test on successful builds
       #     requires:
       #       - build_deploy_docker
 
@@ -235,7 +235,7 @@ workflows:
      # - test_curl_trigger
       - check_update_docker # If updates are needed, call build_deploy_docker
 
-      # - test_image:  # Only run test on sucessfully builds
+      # - test_image:  # Only run test on successful builds
   #         requires:
   #           - build_deploy_docker
     
@@ -250,14 +250,14 @@ workflows:
           # cron: "0 * * * *" # Cron-job every hour
           filters:
             branches:
-              # only: dev, master
-              only: master
+              # only: dev, main
+              only: main
 
     jobs:
       #-  test_curl_trigger
       - check_update_docker # If updates are needed, call build_deploy_docker
 
-      # - test_image:  # Only run test on sucessfully builds
+      # - test_image:  # Only run test on successful builds
       #     requires:
       #       - check_update_docker
       
